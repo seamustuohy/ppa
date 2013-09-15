@@ -25,6 +25,19 @@
       <email>trammell@tik.ee.ethz.ch</email>
     </address>
   </author>
+  <author initials="D." surname="Borkmann" fullname="Daniel Borkmann">
+    <organization abbrev="Red Hat">
+    Red Hat
+    </organization>
+    <address>
+      <postal>
+        <street>Seefeldstrasse 69</street>
+        <city>8008 Zurich</city>
+        <country>Switzerland</country>
+      </postal>
+      <email>dborkman@redhat.com</email>
+    </address>
+  </author>
 
   <date year="2013" month="September" day="4"/>
   <area>Security</area>
@@ -57,8 +70,6 @@
       </list></t>
   </section>
   
-  
-  
   <section title="Introduction">
     
     <t>Surveillance is defined in <xref target="RFC6973"/>, Section 5.1.1, as
@@ -69,13 +80,13 @@
     passive surveillance allows subsequent analysis and inference to be applied
     to the collected data to achieve surveillance aims on a target to be
     identified later, or to analyze general communications patterns and/or
-    behaviors without a specified target individual or group.</t>
+    behaviors without a specified target, individual or group.</t>
     
     <t>An analysis of the costs and benefits of pervasive passive surveillance
     is explicitly out of scope of this work; we presume a priori that
     communications systems should aim to provide appropriate privacy guarantees
     to their users, and that such pervasive surveillance is therefore a bad
-    thing. Therefore, susceptibility to pervasive surveillance should avoided
+    thing. Therefore, susceptibility to pervasive surveillance should be avoided
     as a design goal in protocol design. From these assumptions we take the
     very act of pervasive surveillance to be adversarial by definition.</t>
     
@@ -113,6 +124,7 @@
           sizes of linked resources on the web servers involved would be an
           inference.</t>
 
+
       </list></t>
 
   </section>
@@ -142,8 +154,8 @@
       the communication enabled by the protocol.</t>
           
       <t>We further assume the PPA does not have priviliged information
-      allowing the reversal of encryption, e.g. compromised key material or
-      knowledge of weaknesses in the design or implementation of cryptographic
+      allowing the reversal of strong encryption, e.g. compromised key material
+      or knowledge of weaknesses in the design or implementation of cryptographic
       algorithms at the initiator, recipient, and/or intermediaries. While
       these risks do exist in the real world, the threat model is simplified if
       we presume that a given cryptographic protection for a protocol works as
@@ -211,7 +223,72 @@
   </section>
   
   <section title="Guidelines for protocol evaluation">
-    
+
+    <section title="Use transport-layer security everywhere"> We've been moving
+    in this direction for quite some time. There are serious problems with the
+    certificate authority system - stemming in large part from the decision to
+    include support for the CA business model in the design requirements -
+    which current work in DANE is attempting to address.
+
+    [ref: djb, DNScurve -- at the expense of performance of course]
+    </section>
+
+    <section title="Design for simplicity">This probably sounds very obvious and
+    seems to be common sense, but in practise it is not really the case. Having
+    a specification that is too complex or leaves too much room for interpretation
+    is just a direct path to get it wrong when it comes to auditability of the
+    design and its implementation. Likely, a good example of such a case is IPsec
+    where primary complaints are related to its complexity [1].
+
+     [1,ref: A Cryptographic Evaluation of IPsec, N. Ferguson and B. Schneier,
+           Dec 2003, https://www.schneier.com/paper-ipsec.pdf]
+    </section>
+
+    <section title="Use end-to-end security"> Use end-to-end security for
+    protocols which use multiple hops at the application layer. SMTP is the
+    big one here, and here we have a problem:  S/MIME and PGP are concerned with
+    protecting message payload, leaving headers (addresses, subjects, etc.)
+    unprotected. Addresses need to be left in plaintext to route messages to
+    their destination, so for electronic mail, anyway, there are design changes
+    that need to be made.
+    </section>
+
+    <section title="Resist protocol fingerprinting">Fingerprinting can rely on
+    packet and flow size information used by DPI engines to filter for particular
+    information; the inclusion of null information in packets, or grouping
+    information into more/fewer packets can reduce this risk at the expense of
+    usable bandwidth; though this is implementation guidance, protocols should
+    make it possible do to this. Similarly, fingerprinting can rely on inter-packet
+    timing information: injecting delay into packet transmission can reduce this
+    risk at the expense of latency.
+    </section>
+
+    <section title="Add indirection to the network where possible">
+
+    </section>
+
+    <section title="Design for end-to-end open protocols"></section>
+
+    <section title="Use plausible deniability where possible"></section>
+
+    <section title="Use perfect forward secrecy"></section>
+
+    <section title="Avoid designing for trust relationships">Trust relationships
+    between coorporate entities with the rest of Internet users are prone to a
+    their countries jurisdication. The compromise of various certificate authorities,
+    for example, raise doubt whether their original purpose is actually deployed
+    in a way they were designed to. As bad press will destroy the image and trust
+    of such an authority, incentives seem obvious to hide breaches in secrecy.
+    Moreover, it seems impossible to openly audit which authority is trustworthy
+    and which isn't. MITM etc etc
+
+     [1, ref]
+    </section>
+
+    <section title="Design for decentralisation"></section>
+
+    <section title="Audit for hidden side-channels"></section>
+
     <t>[EDITOR'S NOTE: How to look at a protocol and evaluate the observability
     of the information it transports?]</t>
 
@@ -219,22 +296,12 @@
     Apply unlinked pseudonyms for message routing on envelopes around
     end-to-end encrypted content.]</t>
     
-    <t>[EDITOR'S NOTE: General guidance: Fingerprinting can rely on packet and
-    flow size information; the inclusion of null information in packets, or
-    grouping information into more/fewer packets can reduce this risk at the
-    expense of usable bandwidth; though this is implementation guidance,
-    protocols should make it possible do to dhis. Similarly, fingerprinting can
-    rely on inter-packet timing information: injecting delay into packet
-    transmission can reduce this risk at the expense of latency.]</t>
-
-    
   </section>
 
-      
   <section title="Acknowledgments">
     
-    <t>Thanks to Dilip Many, Daniel Borkmann, and Stephan Neuhaus, who
-    contributed to an initial version of this work.</t>
+    <t>Thanks to Dilip Many and Stephan Neuhaus, who contributed to an initial
+       version of this work.</t>
 
   </section>
   
