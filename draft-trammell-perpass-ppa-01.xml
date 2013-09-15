@@ -8,8 +8,8 @@
 <?rfc symrefs="yes"?>
 
 <front>
-  <title abbrev="Perfect Passive Adversary">
-    The Perfect Passive Adversary: A Threat Model for the Evaluation of Protocols under Pervasive Surveillance
+  <title abbrev="Pervasive Passive Adversary">
+    The Pervasive Passive Adversary: Guidelines for the Evaluation of Protocols under Passive Surveillance
   </title>
   <author initials="B." surname="Trammell" fullname="Brian Trammell">
     <organization abbrev="ETH Zurich">
@@ -25,20 +25,33 @@
       <email>trammell@tik.ee.ethz.ch</email>
     </address>
   </author>
+  <author initials="D." surname="Borkmann" fullname="Daniel Borkmann">
+    <organization abbrev="Red Hat">
+    Red Hat
+    </organization>
+    <address>
+      <postal>
+        <street>Seefeldstrasse 69</street>
+        <city>8008 Zurich</city>
+        <country>Switzerland</country>
+      </postal>
+      <email>dborkman@redhat.com</email>
+    </address>
+  </author>
 
   <date year="2013" month="September" day="13"/>
   <area>Security</area>
   <workgroup>perpass non-WG</workgroup>
   <abstract>
 
-    <t>This document elaborates a threat model for the Perfect Passive
-    Adversary (PPA): an adversary with an interest in eavesdropping that can
-    passively observe network traffic at every layer at every point in the
-    network between the endpoints. It is intended to demonstrate to protocol
-    designers and implementors the observability and inferability of
-    information and metainformation transported over their respective
-    protocols, to assist in the evaluation of the performance of these
-    protocols and the effectiveness of their protection mechanisms under
+    <t>This document elaborates a threat model for the Pervasive Passive
+    Adversary (PPA): an adversary with an interest in indiscriminate
+    eavesdropping that can passively observe network traffic at every layer at
+    every point in the network between the endpoints. It is intended to
+    demonstrate to protocol designers and implementors the observability and
+    inferability of information and metainformation transported over their
+    respective protocols, to assist in the evaluation of the performance of
+    these protocols and the effectiveness of their protection mechanisms under
     pervasive passive surveillance.</t>
 
   </abstract>
@@ -56,8 +69,6 @@
           
       </list></t>
   </section>
-  
-  
   
   <section title="Introduction">
     
@@ -87,7 +98,7 @@
     surveillance to be adversarial by definition.</t>
     
     <t>This document outlines a threat model for an entity performing pervasive
-    passive surveillance, termed the Perfect Passive Adversary (PPA), and
+    passive surveillance, termed the Pervasive Passive Adversary (PPA), and
     explores how to apply this model to the evaluation of protocols. As the
     primary threat posed by pervasive surveillance is a threat to the privacy
     of the parties to a given communication, this document is heavily based on
@@ -120,27 +131,29 @@
           sizes of linked resources on the web servers involved would be an
           inference.</t>
 
+
       </list></t>
 
   </section>
   
-  <section title="The Perfect Passive Adversary">
+  <section title="The Pervasive Passive Adversary">
     
-      <t>The perfect passive adversary (PPA) is an eavesdropper that can
-      potentially observe every packet of all communications at any or every
-      hop in a network path between the outward-facing network interface of the
-      last trusted machine in the initiator's administrative domain and the
-      recipient, and can potentially observe data at rest in intermediate
-      systems outside the administrative domains of the initiator and
-      recipient, but can take no other action with respect to these
-      communications. Limiting the adversary to being completely passive may
-      under-represent the threat to communications privacy posed especially by
-      well-resourced adversaries, but represents well the maximum capability of
-      a single entity whose surveillance is undetectable without physically
-      securing the entire network path. We also assume that the PPA does not
-      have unlimited resources, i.e., that it will attempt to eavesdrop at the
-      most efficient observation point available to it, and will collect as
-      little raw data as necessary to support its aims.</t>
+      <t>The pervasive passive adversary (PPA) is an indiscriminate
+      eavesdropper that can potentially observe every packet of all
+      communications at any or every hop in a network path between the
+      outward-facing network interface of the last trusted machine in the
+      initiator's administrative domain and the recipient, and can potentially
+      observe data at rest in intermediate systems outside the administrative
+      domains of the initiator and recipient, but can take no other action with
+      respect to these communications. Limiting the adversary to being
+      completely passive may under-represent the threat to communications
+      privacy posed especially by well-resourced adversaries, but represents
+      well the maximum capability of a single entity whose surveillance is
+      completely undetectable without physically securing the entire network
+      path. We also assume that the PPA does not have unlimited resources,
+      i.e., that it will attempt to eavesdrop at the most efficient observation
+      point available to it, and will collect as little raw data as necessary
+      to support its aims.</t>
 
       <t>We explicitly assume the PPA does not have the ability to observe
       communications on trusted systems at either the initiator or a recipient
@@ -150,15 +163,15 @@
       the individual at the other endpoint: the compromise is then truly out of
       the scope of the communication enabled by the protocol.</t>
           
-      <t>We further assume the PPA does not have priviliged information
-      allowing the reversal of encryption, e.g. compromised key material or
-      knowledge of weaknesses in the design or implementation of cryptographic
-      algorithms at the initiator, recipient, and/or intermediaries. While
-      these risks do exist in the real world, these are separate from the
-      protocol-level threats we consider here. We therefore presume that a
-      given cryptographic protection for a protocol works as advertised, and
-      declare the evaulation of cryptographic protections to be the subject of
-      another work.</t>
+      <t>We further assume the PPA does not have privileged information
+      allowing the reversal of strong encryption, e.g. compromised key material
+      or knowledge of weaknesses in the design or implementation of
+      cryptographic algorithms at the initiator, recipient, and/or
+      intermediaries. While these risks do exist in the real world, these are
+      separate from the protocol-level threats we consider here. We therefore
+      presume that a given cryptographic protection for a protocol works as
+      advertised, and declare the evaluation of cryptographic protections to be
+      the subject of another work.</t>
       
       <t>The techniques available to the PPA are direct observation and
       inference. Direct observation involves taking information directly from
@@ -169,6 +182,8 @@
       behavioral fingerprints in observed traffic to derive information about
       the observed individual from them, in absence of directly-observed
       sources of the same information.</t>
+      
+      <t>[EDITOR'S NOTE: note similarity to the GPA.]</t>
 
   </section>
   
@@ -222,31 +237,113 @@
 
   </section>
   
-  <section title="Guidelines for protocol evaluation">
+  <section title="Evaluating protocols for PPA resistance">
     
     <t>[EDITOR'S NOTE: How to look at a protocol and evaluate the observability
     of the information it transports?]</t>
-
-    <t>[EDITOR'S NOTE: General guidance: end-to-end encryption when possible.
-    Apply unlinked pseudonyms for message routing on envelopes around
-    end-to-end encrypted content.]</t>
-    
-    <t>[EDITOR'S NOTE: General guidance: Fingerprinting can rely on packet and
-    flow size information; the inclusion of null information in packets, or
-    grouping information into more/fewer packets can reduce this risk at the
-    expense of usable bandwidth; though this is implementation guidance,
-    protocols should make it possible do to dhis. Similarly, fingerprinting can
-    rely on inter-packet timing information: injecting delay into packet
-    transmission can reduce this risk at the expense of latency.]</t>
-
     
   </section>
+  
+  <section title="Designing protocols for PPA resistance">
 
+    <section title="Design for simplicity">
       
+      <t>[EDITOR'S NOTE: This would seem to be common sense, but in practice it
+      is not really the case that our protocol design processes naturally have
+      simplicity as a goal. Simplicity of a design is directly related to the
+      auditability of the design and implementations thereof. Privacy and
+      security features designed into a protocol which are too complex to
+      understand will suffer from limited implementation and deployment. A good
+      example of such a case is IPsec where primary complaints are related to
+      its complexity <xref target="Schneier03"/>.]</t>
+
+    </section>
+
+    <section title="Use transport-layer security everywhere">
+      
+      <t>[EDITOR'S NOTE: clean up the following: We've been moving in this
+      direction for quite some time. The protocols are good but there are
+      problems with the certificate authority system, stemming in large part
+      from the tacit decision to include support for the CA business model in
+      the design requirements, cf. design for simplicity. Current work in DANE
+      is attempting to address this but this may end up trading one set of
+      trust problems for another. Presuming each application layer hop has a
+      good certificate for its peers, this is a good way to increase the cost
+      for the PPA, by making application-layer data and metadata unobservable
+      on the wire, and requiring eavesdropping on intermediate systems.]</t>
+
+      <t>[ref: djb, DNScurve -- at the expense of performance of course]</t>
+    </section>
+
+
+    <section title="Use end-to-end security for messages">
+
+      <t>[EDITOR'S NOTE: Use end-to-end security for protocols which use
+      multiple hops at the application layer. SMTP is the big one here, and
+      here we have a problem: S/MIME and PGP are concerned with protecting
+      message payload, leaving headers (addresses, subjects, etc.) unprotected.
+      Addresses need to be left in plaintext to route messages to their
+      destination, so for electronic mail, anyway, there are design changes
+      that need to be made.]</t>
+
+    </section>
+
+    <section title="Resist protocol fingerprinting">
+      
+      <t>[EDITOR'S NOTE: Fingerprinting can rely on packet and flow size
+      information used by DPI engines to filter for particular information; the
+      inclusion of null information in packets, or grouping information into
+      more/fewer packets can reduce this risk at the expense of usable
+      bandwidth; though this is implementation guidance, protocols should make
+      it possible do to this. Similarly, fingerprinting can rely on
+      inter-packet timing information: injecting delay into packet transmission
+      can reduce this risk at the expense of latency. Point to make here: this
+      will always make transmissions slower and bigger, since we've tended to
+      optimize protocols for minimum bandwidth and minimum latency, the only
+      way we can go is up.]</t>
+    
+    </section>
+
+    <section title="Add indirection where possible">
+
+    </section>
+
+    <section title="Design for end-to-end open protocols">
+      
+    </section>
+
+    <section title="Use plausible deniability where possible">
+      
+    </section>
+
+    <section title="Use perfect forward secrecy">
+      
+    </section>
+
+    <section title="Avoid designing for trust relationships">
+      
+      Trust relationships
+    between coorporate entities with the rest of Internet users are prone to a
+    their countries jurisdication. The compromise of various certificate authorities,
+    for example, raise doubt whether their original purpose is actually deployed
+    in a way they were designed to. As bad press will destroy the image and trust
+    of such an authority, incentives seem obvious to hide breaches in secrecy.
+    Moreover, it seems impossible to openly audit which authority is trustworthy
+    and which isn't. MITM etc etc
+
+     [1, ref]
+    </section>
+
+    <section title="Design for decentralization"></section>
+
+    <section title="Audit for hidden side-channels"></section>
+
+  </section>
+
   <section title="Acknowledgments">
     
-    <t>Thanks to Dilip Many, Daniel Borkmann, and Stephan Neuhaus, who
-    contributed to an initial version of this work.</t>
+    <t>Thanks to Dilip Many and Stephan Neuhaus, who contributed to an initial
+       version of this work.</t>
 
   </section>
   
@@ -264,6 +361,13 @@
         <?rfc include="reference.RFC.5246" ?>
         <?rfc include="reference.RFC.5655" ?>
         <?rfc include="reference.RFC.6120" ?>
+        <reference anchor="Ferguson03">
+          <front>
+            <title>A Cryptographic Evaluation of IPsec (https://www.schneier.com/paper-ipsec.pdf)</title>
+            <author surname="Ferguson" initials="D."/>
+            <author surname="Schneier" initials="B."/>
+            <date month="December" year="2003"/>
+        </reference>
     </references>
 
 </back>
