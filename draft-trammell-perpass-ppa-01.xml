@@ -225,13 +225,18 @@
       
       <section title="Information subject to direct observation">
 
-          <t>[EDITOR'S NOTE: list includes but not limited to communications content, application-layer identifiers, network- and transport-layer identifiers, association of DNS queries with subsequent usage of information in the answers.]</t>
+          <t>[EDITOR'S NOTE: list includes but not limited to communications
+          content, application-layer identifiers, network- and transport-layer
+          identifiers, association of DNS queries with subsequent usage of
+          information in the answers.]</t>
           
       </section>
       
       <section title="Metainformation useful for inference">
 
-          <t>[EDITOR'S NOTE: list includes but not limited to interpacket timing; packet sizes; flow packet and octet counts; presence of options which could lead to OS fingerprinting for deNATting, etc.]</t>
+          <t>[EDITOR'S NOTE: list includes but not limited to interpacket
+          timing; packet sizes; flow packet and octet counts; presence of
+          options which could lead to OS fingerprinting for deNATting, etc.]</t>
 
       </section>
 
@@ -322,21 +327,32 @@
 
     <section title="Avoid designing for trust relationships">
       
-      Trust relationships
-    between coorporate entities with the rest of Internet users are prone to a
-    their countries jurisdication. The compromise of various certificate authorities,
-    for example, raise doubt whether their original purpose is actually deployed
-    in a way they were designed to. As bad press will destroy the image and trust
-    of such an authority, incentives seem obvious to hide breaches in secrecy.
-    Moreover, it seems impossible to openly audit which authority is trustworthy
-    and which isn't. MITM etc etc
-
-     [1, ref]
+    <t>[EDITOR'S NOTE: Trust relationships between coorporate entities with the
+    rest of Internet users are prone to a their countries jurisdication. The
+    compromise of various certificate authorities, for example, raise doubt whether
+    their original purpose is actually deployed in a way they were designed to.
+    As bad press will destroy the image and trust of such an authority, incentives
+    seem obvious to hide breaches in secrecy. Moreover, it seems impossible to
+    openly audit which authority is trustworthy and which isn't. MITM etc etc</t>
     </section>
 
     <section title="Design for decentralization"></section>
 
     <section title="Audit for hidden side-channels"></section>
+
+    <section title="Open source implementation">
+
+    <t>[EDITOR'S NOTE: This seems rather a implementation recommendation, but
+        it's critical to open source implementations in order to have public
+        audits and reviewability for the code. Closed source code may easily
+        contain hidden backdoors, while open source code can be reviewed by
+        many people publicly and avoids to have a central control from one
+        company that could be put under pressure by an entity to include
+        hidden backdoors or on-purpose vulnerabilities, while open sourced
+        implementations can be easily forked, modified and would make such
+        an inclusion harder to achieve.]</t>
+
+    </section>
 
   </section>
 
