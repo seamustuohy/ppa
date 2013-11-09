@@ -222,7 +222,7 @@
 
       <t>In the remainder of this analysis, we list kinds of information which
       can be directly observed; this may seem somewhat obvious,
-      but are included for completeness. We then explore the types of information which may be useful for drawing inferences about user behavior, then go into practical detail on inference attacks against just information available in the IP header.</t>
+      but are included for completeness. We then explore the types of information which may be useful for drawing inferences about user behavior, then go into practical detail on inference attacks against just information available in the IP header, to better illustrate the problem.</t>
       
       <section title="Information subject to direct observation">
 
@@ -230,7 +230,7 @@
 
         <t>Protocols which encrypt their payload using an application- or transport-layer encryption scheme (e.g. <xref target="RFC5246">TLS</xref>) still expose all the information in their network and transport layer headers to a PPA, including source and destination addresses and ports. <xref target="RFC4303">IPsec ESP</xref> further encrypts the transport-layer headers, but still leaves IP address information unencrypted; in tunnel mode, these addresses correspond to the tunnel endpoints. Cryptographic protocols themselves, e.g. the TLS session identifier, may leak information that can be used for correlation and inference. While this information is much less semantically rich than the application payload, it can still be useful for the inferring an individual's activities.</t>
 
-        <t>Protocols which imply the storage of some data at rest in intermediaries (e.g., most store-and-forward) leave this data subject to observation at a PPA that has compromised these intermediaries, unless the data is encrypted end-to-end by the application layer protocol, or the implementation uses an encrypted store for this data.</t>
+        <t>Protocols which imply the storage of some data at rest in intermediaries leave this data subject to observation at a PPA that has compromised these intermediaries, unless the data is encrypted end-to-end by the application layer protocol, or the implementation uses an encrypted store for this data.</t>
           
       </section>
       
@@ -242,6 +242,10 @@
 
       </section>
 
+      <section title="The Non-Anonymity of IP Addresses">
+
+        <t>[EDITOR'S NOTE: frontmatter]</t>
+
       <section title="Analysis of IP headers"
                anchor="analIP">
 
@@ -252,13 +256,12 @@
       installing monitoring tools in Internet routers. Of course, a single link or
       a single router only provides access to a fraction of the global Internet
       traffic. However, monitoring a number of high capacity links or monitoring a
-      set of  routers placed at strategic locations provides access to a good
-      sampling of  Internet traffic.</t> 
+      set of routers placed at strategic locations provides access to a good
+      sampling of Internet traffic.</t> 
 
-      <t>Tools like IPFIX <xref
-      target="RFC7011"/> allow administrators to acquire statistics about sequences
+      <t>Tools like IPFIX <xref target="RFC7011"/> allow administrators to acquire statistics about sequences
       of packets with some common properties that pass through a network device.
-      The most common set of properties used in flow measurement is the "five tuple" 
+      The most common set of properties used in flow measurement is the "five-tuple" 
       of source and destination addresses, protocol type, 
       and source and destination ports. These
       statistics are commonly used for network engineering, but could certainly be
@@ -274,31 +277,28 @@
 
       </section>
 
-      <section title="Linking IP addresses to user identities">
+      <section title="Correlation of IP addresses to user identities">
       
       <t>In <xref target="analIP" />, we have assumed that IP addresses can be correlated 
       with specific user identities. This can be done in various ways.</t>
 
       <t>Tools like reverse DNS lookup can be used to retrieve 
-      the DNS names of servers. In fact, since the addresses of servers tend to be quite 
-      stable and since servers are relatively less numerous than users, we can expect 
-      that large scale monitoring services maintain databases of servers' IP 
-      addresses to facilitate such retrieval. On the other hand, the reverse lookup
-      of users addresses is less informative. For example, a lookup of the address 
-      currently used by my home network returns a name of the form 
-      "c-xxx-xxx-xxx-xxx.hsd1.wa.comcast.net" in which the symbols "xxx-xxx-xxx-xxx" 
-      correspond to the IP address used by my home network. This particular type of 
+      the DNS names of servers. Since the addresses of servers tend to be quite 
+      stable and since servers are relatively less numerous than users, a PPA 
+      could easily maintain its own copy of the DNS for well-known or popular 
+      servers, to accelerate such lookups.</t>
+
+      <t>On the other hand, the reverse lookup of IP addresses of users is
+      generally less informative less informative. For example, a lookup of the
+      address currently used by one author's home network returns a name of the form
+      "c-xxx-xxx-xxx-xxx.hsd1.wa.comcast.net" in which the symbols "xxx-xxx-xxx-xxx"
+      correspond to the IP address used by the network. This particular type of
       reverse DNS lookup does not reveal much interesting information.</t>
 
-      <t>Traditionally, law enforcement has relied on Internet Service Providers
-      (ISP) to provide identification on a case by case basis of the "owner" of a
-      specific IP address. This is a reasonably expedient process for police
-      investigations, but large scale monitoring requires something more efficient.
-      If the monitoring service can secure the cooperation of the ISP, they may
-      obtain the link between identity and address through some automated update
-      process.  We may expect that some ISP will not willingly cooperate with large
-      scale monitoring of their customers, in which case the monitoring  entities
-      have to rely on other methods.</t>
+      <t>In many jurisdictions, Internet Service Providers (ISPs) are required to provide identification on a case by case basis of the "owner" of a specific IP address for law enforcement purposes. This is a reasonably expedient process for targeted
+      investigations, but pervasive surveillance requires something more efficient.
+      A PPA that could secure the cooperation of the ISP could correlate IP addresses
+      and user identities automatically.</t>
 
       <t>
       Even if the ISP does not cooperate, identity can often be obtained by 
@@ -306,42 +306,36 @@
       can leak information that links the IP address to the identity of the user. 
       </t>
 
-      <section title="Monitoring POP3, IMAP or SIP clients for identifying users of IP addresses">
+      <section title="Monitoring messaging clients for IP address correlation">
 
-      <t>POP3 <xref target="RFC1939" /> and IMAP <xref target="RFC3501" />
-      are used to retrieve mail from mail servers, while a variant of SMTP  <xref
-      target="RFC5321" /> is used to submit messages through mail servers. The IMAP
-      connections originate from the client, and typically start with an
-      authentication exchange in which the client proves its identity by answering a
-      password challenge. </t>
-      
-      <t>If the protocol is executed in clear text, monitoring services can "tap"
-      the links to the mail server, retrieve the user name provided by the client,
-      and associate it with the IP address used to establish the connection.  </t>
+        <t>POP3 <xref target="RFC1939" /> and IMAP <xref target="RFC3501" />
+        are used to retrieve mail from mail servers, while a variant of SMTP <xref
+        target="RFC5321" /> is used to submit messages through mail servers. IMAP
+        connections originate from the client, and typically start with an
+        authentication exchange in which the client proves its identity by answering a
+        password challenge. </t>
+        
+        <t>If the protocol is executed in clear text, monitoring services can "tap"
+        the links to the mail server, retrieve the user name provided by the client,
+        and associate it with the IP address used to establish the connection.</t>
 
-      <t>
-      The same attack can be executed against the SIP protocol, <xref target="RFC3261" />
-      if the connection between the SIP UA and
-      the SIP server operates in clear text. 
-      </t>
+        <t>
+        The same attack can be executed against the <xref target="RFC3261">SIP</xref>
+        protocol, if the connection between the SIP UA and the SIP server operates in clear text. 
+        </t>
 
-      <t>There are many instant messaging services operating over the
-      Internet using proprietary protocols. If any of these proprietary
-      protocols includes clear-text transmission of the user identity, it can be
-      tapped to provide an association between the user identity and the IP
-      address.</t>
+        <t>There are many instant messaging services operating over the
+        Internet using proprietary protocols. If any of these proprietary
+        protocols includes clear-text transmission of the user identity, these can be
+        observed to provide an association between the user identity and the IP
+        address.</t>
 
-</section>
+      </section>
 
-<section title="Retrieving IP addresses from mail headers">
-<t>
-The SMTP protocol specification
-<xref target="RFC5321" />  
-requires that each successive SMTP relay adds a "Received" header
-to the mail headers. The purpose of these headers is to enable audit of mail transmission,
-and perhaps to distinguish between regular mail and spam. Here is an extract from the headers
-of a message recently received from the "perpass" mailing list:
-</t>
+      <section title="Retrieving IP addresses from mail headers">
+
+        <t><xref target="RFC5321">SMTP</xref> requires that each successive SMTP relay adds a "Received" header to the mail headers. The purpose of these headers is to enable audit of mail transmission, and perhaps to distinguish between regular mail and spam. Here is an extract from the headers of a message recently received from the "perpass" mailing list:</t>
+
 <figure>
 <artwork align="left"><![CDATA[
    Received: from xxx-xxx-xxx-xxx.zone13.example.org (HELO ?192.168.1.100?)
@@ -354,24 +348,25 @@ of a message recently received from the "perpass" mailing list:
    From: Some One <some.one@example.org>
 ]]></artwork>
 </figure>
-<t>
-This is the first "Received" header attached to the message by the first SMTP relay. 
-For privacy reason, the field values have been anonymized. We learn here that the message
-was submitted by "Some One" on October 27, from a host behind a NAT (192.168.1.100) that
-used the IP address "xxx.xxx.xxx.xxx." The information remained in the message, and
-is accessible by all recipients of the "perpass" mailing list, or indeed by any monitoring
-service that sees at least one copy of the message.
-</t>
-<t>
-For monitoring services, such information is just plain candy. Monitor enough e-mail
-traffic and you can regularly update the mapping between IP addresses and individuals.
-Even if the SMTP traffic was encrypted, the monitoring service could still register
-to receive a copy of public mailing lists like "perpass," and then log the header
-fields.
-</t>
-<t>
-Similar information is available in the SIP headers <xref target="RFC3261" />.
-</t>
+
+          <t>This is the first "Received" header attached to the message by
+          the first SMTP relay.  For privacy reason, the field values have been
+          anonymized. We learn here that the message was submitted by "Some One" on
+          October 27, from a host behind a NAT (192.168.1.100) that used the IP address
+          "xxx.xxx.xxx.xxx." The information remained in the message, and is accessible
+          by all recipients of the "perpass" mailing list, or indeed by any monitoring
+          service that sees at least one copy of the message. </t>
+
+          <t>For monitoring services, such information is just plain candy.
+          Monitor enough e-mail traffic and you can regularly update the mapping between
+          IP addresses and individuals. Even if the SMTP traffic was encrypted, the
+          monitoring service could still register to receive a copy of public mailing
+          lists like "perpass," and then log the header fields. </t>
+
+          <t>
+          Similar information is available in the SIP headers <xref target="RFC3261" />.
+          </t>
+
 </section>
 
 <section title="Tracking address use with web cookies">
@@ -418,6 +413,7 @@ maybe some ISP cooperation.
 </t>
 </section>
 
+    </section>
 
   </section>
   
