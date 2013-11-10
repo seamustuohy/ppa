@@ -53,7 +53,7 @@
       </address>
     </author>
 
-  <date year="2013" month="November" day="15"/>
+  <date year="2013" month="November" day="11"/>
   <area>Security</area>
   <workgroup>perpass non-WG</workgroup>
   <abstract>
@@ -72,18 +72,7 @@
 </front>
 
 <middle>
-  
-  <section title="Open Issues">
-      <t><list style="numbers">
-
-          <t>Lots of things need citations that don't have them yet.</t>
-          
-          <t>Determine whether we want to include protocol design guidelines here,
-          or refer to draft-cooper- and (possibly) other documents.</t>
-          
-      </list></t>
-  </section>
-  
+    
   <section title="Introduction">
     
     <t>Surveillance is defined in <xref target="RFC6973"/>, Section 5.1.1, as
@@ -121,7 +110,7 @@
   
   <section title="Terminology">
       
-      <t>[EDITOR'S NOTE: Check to see whether we actually use these]
+      <t>[EDITOR'S NOTE: Check to see whether we actually use these...]
 
       <t>The terms Anonymity, Anonymity Set, Anonymous, Attacker, Eavesdropper,
       Fingerprint, Fingerprinting, Identifier, Identity, Individual, Initiator,
@@ -164,14 +153,14 @@
         <t>observe data at rest in intermediate systems between the 
            endpoints controlled by the initiator and recipient; but</t>
 
-        <t>takes no other action with respect to these communications</t>
+        <t>takes no other action with respect to these communications (i.e., blocking, modification, injection, etc.).</t>
         
       </list>
       
       We note that a threat model that limits the adversary to being
       completely passive may under-represent the threat to communications
-      privacy posed especially by well-resourced adversaries, but represents
-      reasonably well the maximum capability of a single entity interested in 
+      privacy posed especially by well-resourced adversaries, but submit that it represents
+      the maximum capability of a single entity interested in 
       remaining undetectable.</t>
 
       <t>The techniques available to the PPA are direct observation and
@@ -198,7 +187,7 @@
   <section title="Threat analysis">
       
       <t>On initial examination, the PPA would appear to be trivially
-      impossible to defend against. If the PPA has access to every byte of every packet of a communication, then full application payload and content is available.</t>
+      impossible to defend against. If the PPA has access to every byte of every packet of a communication, then full application payload and content is available for applications which do not provide encryption.</t>
 
       <t><xref target="RFC3365">Guidance to protocol designers</xref> to provide cryptographic protection of confidentiality in their protocols improves this situation a great deal. The use of <xref target="RFC5246">TLS</xref> reduces the information available for correlation to the network and transport layer headers (e.g. source and destination IP addresses and ports) on each hop, but leaves any data at rest used by a protocol on intermediate systems vulnerable to intermediate system compromise.</t>
 
@@ -209,7 +198,7 @@
 
       <t>We can assume that the PPA does not have unlimited resources,
       i.e., that it will attempt to eavesdrop at the most efficient observation
-      point available to it, and will collect as little raw data as necessary
+      point(s) available to it, and will collect as little raw data as necessary
       to support its aims. This allows us to back
       away from this worst-case scenario. Storing full packet information for a
       fully-loaded 10 Gigabit Ethernet link will fill one 4TB hard disk (the
@@ -221,9 +210,13 @@
       can be inferred from various network traffic capture and analysis
       techniques other than full packet observation.</t>
 
-      <t>In the remainder of this analysis, we list kinds of information which
-      can be directly observed; this may seem somewhat obvious,
-      but are included for completeness. We then explore the types of information which may be useful for drawing inferences about user behavior, then go into practical detail on inference attacks against just information available in the IP header, to better illustrate the extent of the problem.</t>
+      <t>In the remainder of this analysis, we categorize the ways that
+information radiates off of protocols. First, we list kinds of information
+that can be directly observed; this may seem somewhat obvious,
+but is included for completeness. We then explore the types of information
+which may be useful for drawing inferences about user behavior, then go into
+practical detail on inference attacks against just information available in
+the IP header, to better illustrate the extent of the problem.</t>
       
       <section title="Information subject to direct observation">
 
@@ -239,21 +232,19 @@
 
           <t>Inference is information extracted from later analysis of an observed communication, and/or correlation of observed information with information available from other sources. Indeed, most useful inference performed by a PPA falls under the rubric of correlation. The simplest example of this is the observation of DNS queries and answers from and to a source and correlating those with IP addresses with which that source communicates can give access to information otherwise not available from encrypted application payloads (e.g., the Host: HTTP/1.1 request header when HTTP is used with TLS).</t>
 
-          <t>Inference can also leverage information obtained from sources other than direct traffic observation. Geolocation databases, for example, have been developed for mundane applications including advertising. These can be used to map an IP address to a location [EDITOR'S NOTE: reference something relevant from geopriv], and that location information can be used to draw further inferences toward identifying or profiling an individual.</t>
+          <t>Inference can also leverage information obtained from sources other than direct traffic observation. Geolocation databases, for example, have been developed for many applications including advertising. These can be used to map an IP address to a location [EDITOR'S NOTE: reference something relevant from geopriv], and that location information can be used to draw further inferences toward identifying or profiling an individual.</t>
 
-          <t>Social media provide a rich source of more or less publicly accessible information. This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated by the individuals themselves [EDITOR'S NOTE: this really starts moving into the policy and education space, so we should find a way to constrain this point to the technical realities...]. Correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
+          <t>Social media provide another source of more or less publicly accessible information.This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated by the individuals themselves [EDITOR'S NOTE: this really starts moving into the policy and education space, so we should find a way to constrain this point to the technical realities...]. Correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
 
       </section>
 
-      <section title="On the Non-Anonymity of IP Addresses">
+      <section title="On the Non-Anonymity of IP Addresses" anchor="ip-non-anon">
 
-        <t>[EDITOR'S NOTE: frontmatter]</t>
+        <t>In this section, we explore the non-anonymity of even encrypted IP traffic by examining some inference techniques for associating a set of addresses with an individual, in order to illustrate the difficulty of defending communications against a PPA. Here, the basic problem is that information radiated even from protocols which have no obvious connection with personal data can be correlated with other information which can paint a very rich behavioral picture, that only takes one unprotected link in the chain to associate with an identity.</t>
 
       <section title="Analysis of IP headers"
                anchor="analIP">
 
-      <t>[EDITOR'S NOTE: begin content from draft-huitema; need to do a pass to remove things that don't apply strictly to the PPA; run a check on the remainder to bring it in line
-      with terminology]</t>
 
       <t>Internet traffic can be monitored by tapping Internet links, or by
       installing monitoring tools in Internet routers. Of course, a single link or
@@ -377,35 +368,14 @@
           <t>As cookies are sent in clear text, a PPA can build a database that
           associates cookies to IP addresses for non-HTTPS traffic. If the IP address is
           already identified, the cookie  can be linked to the user identify. After
-          that, if the same cookie appears on a  new IP address, the new IP address can
+          that, if the same cookie appears on a new IP address, the new IP address can
           be immediately associated with the pre-determined identity. </t>
 
         </section>
 
         <section title="Tracking address use with network graphs">
 
-          <t> There have been many publicly reported instances in which the police
-          managed to find the owner of a "disposable" cell phone. In theory this is
-          hard, because there is no direct registration of the owner's identity. But in
-          practice, the identity can be  inferred through analysis of network graphs.
-          </t>
-          
-          <t> Suppose that the new owner of the cell phone uses it carelessly to call
-          his mother,  his brother, his boss and his preferred restaurant. Mother,
-          brother, boss and restaurant  are part of the "network graph" already
-          collected by pervasive monitoring, and in fact  constitute an almost unique
-          signature of this particular individual. A quick database search and voila,
-          the cell phone is identified. </t>
-          
-          <t>The same approach can be applied to IP addresses. Users do a lot of repeat
-          visits to web sites, mail servers, game servers, instant messaging servers,
-          etc. These visits tend to follow time patterns. It is easy to imagine that if
-          a particular pattern was  seen from address "A" one day, and the same pattern
-          from address "B" the next day, then A and B point to the same user, whose
-          computer just got a new address. At that point, the user may be identified
-          only as a "case number," but the real identity can be filled as soon as email
-          monitoring is successful, or SIP monitoring, or maybe some ISP cooperation.
-          </t>
+          <t>A PPA can track traffic from an IP address not yet associated with an individual to various public services (e.g. websites, mail servers, game servers), and exploit patterns in the observed traffic to correlate this address with other addresses that show similar patterns. For example, an two addresses that show connections to the same IMAP or webmail services, the same set of favorite websites, and game servers at similar times of day may be associated with the same individual. Correlated addresses can then be tied to an individual through one of the techniques above, walking the "network graph" to expand the set of attributable traffic.</t>
 
         </section>
 
@@ -414,93 +384,90 @@
   </section>
   
   <section title="Evaluating protocols for PPA resistance">
-    
-    <t>[EDITOR'S NOTE: How to look at a protocol and evaluate the observability
-    of the information it transports? Probably refer to draft-cooper-]</t>
+
+    <t>Though inference by a PPA makes the problem of guaranteeing privacy in the face of passive surveillance difficult, it is possible to strengthen each link in the chain in order to increase their resistance. PPA resistent protocols have the following properties:
+
+      <list style="symbols">
+
+        <t>The confidentiality of all information not absolutely required for the operation of the protocol at intermediate systems is cryptographically protected.</t>
+
+        <t>The confidentiality of all identifiers which can be associated with specific individuals through observation or inference are cryptographically protected on a hop-by-hop basis, even if they are required for the operation of the protocol at intermediate systems.</t>
+
+        <t>Identifiers required for the operation of the protocol are non-persistent and non-specific to individuals to the extent possible.</t>
+
+        <t>The protocol radiates as little information as possible which can be used to fingerprint specific instances of the protocol.</t>
+
+      </list>
+
+      Clearly, the messaging protocols examined in <xref target="ip-non-anon"/> are, by these criteria, not particularly resistent to a PPA. In evaluating a protocol for PPA resistance, tradeoffs in efficiency, latency, manageability, and other application requirements will need to be evaluated, as well. More detailed information on privacy considerations for protocol design are given in <xref target="I-D.cooper-ietf-privacy-requirements"/>.</t>
     
   </section>
   
-  <section title="Designing protocols for PPA resistance">
+  <section title="General protocol design recommendations for PPA resistance">
 
-    <t>[EDITOR'S NOTE: Much of the following came from a blog post on trammell.ch, and needs to be made more lucid before publication. Not clear how much of this really belongs in a threat model document.]</t>
+    <t>The following general recommendations are intended to guide discussions about improving the resistance of IETF protocols to a PPA; specific recommendations are the subject of a separate specification.</t>
 
-    <section title="Design for simplicity">
+    <section title="Encrypt everything you can">
       
-      <t>[EDITOR'S NOTE: This would seem to be common sense, but in practice it
-      is not really the case that our protocol design processes naturally have
+      <t>Though IETF protocols have been long moving in the direction of more and better cryptographic protection <xref target="RFC3365"/>, there is continued room for improvement. Approaches such as opportunistic encryption, while not providing identity guarantees, may have benefits in confidentiality that reduce the information radiated from protocols, increasing the costs for pervasive surveillance. To some extent encryption is a deployment problem rather than a protocol design and implementation problem; improvements in usability may be useful here.</t>
+
+      <t>The design and deployment of end-to-end encryption for a protocol, especially for messaging applications, can reduce the ability of a PPA to observe application-layer information and identifiers at a compromised intermediate system.</t>
+
+      <t>[EDITOR'S NOTE: mention djb, DNScurve? at the expense of performance of course]</t>
+    </section>
+
+    <section title="Design and implement for simplicity and auditability">
+      
+      <t>This would seem to be common sense, but in practice it
+      is not really the case that protocol design processes naturally have
       simplicity as a goal. Simplicity of a design is directly related to the
       auditability of the design and implementations thereof. Privacy and
       security features designed into a protocol which are too complex to
       understand will suffer from limited implementation and deployment. A good
       example of such a case is IPsec where primary complaints are related to
-      its complexity <xref target="Schneier03"/>.]</t>
+      its complexity <xref target="Ferguson03"/>. 
+
+      <t>The auditability of a protocol is directly related to the ability to measure and reason about the information that it radiates that could be used for inference by a PPA. Audits of designs and implementations can also reduce the risk of hidden side channels which could carry additional information useful to a PPA.</t>
+
+      <t>Open-source implementations generally increase auditability. This seems rather a implementation recommendation, but we note that it is easier for closed source code may to contain hidden sources of information radiation, hidden backdoors, while open source code can be reviewed by many people publicly.</a>
 
     </section>
 
-    <section title="Use transport-layer security everywhere">
+    <section title="Allow for fingerprinting resistance in protocol designs">
       
-      <t>[EDITOR'S NOTE: clean up the following: We've been moving in this
-      direction for quite some time. The protocols are good but there are
-      problems with the certificate authority system, stemming in large part
-      from the tacit decision to include support for the CA business model in
-      the design requirements, cf. design for simplicity. Current work in DANE
-      is attempting to address this but this may end up trading one set of
-      trust problems for another. Presuming each application layer hop has a
-      good certificate for its peers, this is a good way to increase the cost
-      for the PPA, by making application-layer data and metadata unobservable
-      on the wire, and requiring eavesdropping on intermediate systems.]</t>
-
-      <t>[ref: djb, DNScurve -- at the expense of performance of course]</t>
-    </section>
-
-
-    <section title="Use end-to-end security for messages">
-
-      <t>[EDITOR'S NOTE: Use end-to-end security for protocols which use
-      multiple hops at the application layer. SMTP is the big one here, and
-      here we have a problem: S/MIME and PGP are concerned with protecting
-      message payload, leaving headers (addresses, subjects, etc.) unprotected.
-      Addresses need to be left in plaintext to route messages to their
-      destination, so for electronic mail, anyway, there are design changes
-      that need to be made.]</t>
-
-    </section>
-
-    <section title="Resist protocol fingerprinting">
-      
-      <t>[EDITOR'S NOTE: Fingerprinting can rely on packet and flow size
-      information used by DPI engines to filter for particular information; the
-      inclusion of null information in packets, or grouping information into
-      more/fewer packets can reduce this risk at the expense of usable
-      bandwidth; though this is implementation guidance, protocols should make
-      it possible do to this. Similarly, fingerprinting can rely on
-      inter-packet timing information: injecting delay into packet transmission
-      can reduce this risk at the expense of latency. Point to make here: this
-      will always make transmissions slower and bigger, since we've tended to
-      optimize protocols for minimum bandwidth and minimum latency, the only
-      way we can go is up.]</t>
+      <t>Fingerprinting provides a source of information for inference, and can rely on packet and flow size and timing information. The inclusion of null information in packets, or grouping information into more/fewer packets can reduce this risk. Since protocols tend to be optimized for minimum bandwidth usage and minumum latency, the only way to go is up, so this resistance comes at the expense of usable
+      bandwidth and increased latency. While not necessarily applicable in the general case, protocol designs can make
+      it possible do to this.</t>
     
     </section>
 
     <section title="Add indirection where possible">
 
+      <t>[EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits here...]</t>
+
     </section>
 
     <section title="Design for end-to-end open protocols">
-      
+
+      <t>[EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits here...]</t>
+
     </section>
 
     <section title="Use plausible deniability where possible">
+
+      <t>[EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits here. This one looks maybe a bit too specific.]</t>
       
     </section>
 
     <section title="Use perfect forward secrecy">
+
+      <t>[EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits here. This one looks maybe a bit too specific.]</t>
       
     </section>
 
     <section title="Avoid designing for trust relationships">
       
-    <t>[EDITOR'S NOTE: Trust relationships between coorporate entities with the
+    <t>[EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits here: Trust relationships between coorporate entities with the
     rest of Internet users are prone to a their countries jurisdication. The
     compromise of various certificate authorities, for example, raise doubt whether
     their original purpose is actually deployed in a way they were designed to.
@@ -509,21 +476,9 @@
     openly audit which authority is trustworthy and which isn't. MITM etc etc</t>
     </section>
 
-    <section title="Design for decentralization"></section>
+    <section title="Design for decentralization">
 
-    <section title="Audit for hidden side-channels"></section>
-
-    <section title="Open source implementation">
-
-    <t>[EDITOR'S NOTE: This seems rather a implementation recommendation, but
-        it's critical to open source implementations in order to have public
-        audits and reviewability for the code. Closed source code may easily
-        contain hidden backdoors, while open source code can be reviewed by
-        many people publicly and avoids to have a central control from one
-        company that could be put under pressure by an entity to include
-        hidden backdoors or on-purpose vulnerabilities, while open sourced
-        implementations can be easily forked, modified and would make such
-        an inclusion harder to achieve.]</t>
+      <t>[EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits here. This one gets into new business models. We need to talk about that if we want to harden the Internet, but this might not be the document to do so.]</t>
 
     </section>
 
@@ -537,7 +492,7 @@
 
   <section title="Security Considerations">
 
-    <t>This document explores the capabilities of an adversary with an interest in undermining the security of the Internet to enable pervasive surveillance activities. It does not provide any specific protocol guidance that may impact the security of those protocols, but it is hoped that the awareness of this threat will end up being a metacontribution to the Internet's security.</t>
+    <t>This document explores the capabilities of an adversary with an interest in undermining the security of the Internet to enable pervasive surveillance activities. It does not provide any specific protocol guidance that may impact the security of those protocols, but it is hoped that the awareness of this threat will end up being a metacontribution to Internet security.</t>
 
   </section>
 
@@ -545,8 +500,7 @@
   <section title="Acknowledgments">
     
     <t>Thanks to Dilip Many and Stephan Neuhaus, who contributed to an initial
-       version of this work. Thanks to Mark Townsley for pointing out the relevance of the state of endpoint vulnerabilities to the abilities of the PPA, and to Stephen Farrell for the encouragement and help with scoping the document.</t>
-
+       version of this work. Thanks to Mark Townsley, Stephen Farrell, Chris Inacio, and others in the anonymity set of "people we've forgotten to thank" for feedback and input to this draft.</t>
   </section>
   
 </middle>
@@ -555,6 +509,7 @@
   
     <references title="Normative References">
       <?rfc include="reference.RFC.6973" ?>
+      <?rfc include="I.D-cooper-ietf-privacy-requirements" ?>
     </references>
 
     <references title="Informative References">
