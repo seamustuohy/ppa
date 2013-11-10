@@ -9,7 +9,7 @@
 
 <front>
   <title abbrev="Pervasive Passive Adversary">
-    Modeling the Threat of Passive Surveillance
+    A Threat Model for Pervasive Passive Surveillance
   </title>
   <author initials="B." surname="Trammell" fullname="Brian Trammell">
     <organization abbrev="ETH Zurich">
@@ -78,8 +78,8 @@
 
           <t>Lots of things need citations that don't have them yet.</t>
           
-          <t>Threat analysis and protocol design guidelines need to be
-          completed, which will require them to be started too.</t>
+          <t>Determine whether we want to include protocol design guidelines here,
+          or refer to draft-cooper- and (possibly) other documents.</t>
           
       </list></t>
   </section>
@@ -104,7 +104,7 @@
     difficult than protecting the privacy of a single individual within a
     larger population.</t>
     
-    <t>In this document, we assume a priori that communications systems should
+    <t>In this document, we take as given that communications systems should
     aim to provide privacy guarantees to their users, and that susceptibility
     to pervasive surveillance should avoided to the extent possible as a design
     goal in protocol design. From these assumptions we take the very act of
@@ -121,6 +121,8 @@
   
   <section title="Terminology">
       
+      <t>[EDITOR'S NOTE: Check to see whether we actually use these]
+
       <t>The terms Anonymity, Anonymity Set, Anonymous, Attacker, Eavesdropper,
       Fingerprint, Fingerprinting, Identifier, Identity, Individual, Initiator,
       Intermediary, Observer, Pseudonym, Pseudonymity, Pseudonymous, Recipient,
@@ -189,15 +191,14 @@
       or knowledge of weaknesses in the design or implementation of
       cryptographic algorithms at the initiator, recipient, and/or
       intermediaries. However, we consider the evaluation and improvement of cryptographic
-      protections, while important to improving the security of the Internet in the face of pervasive surveillance, to be out of scope for this work: here, we assume that a given cryptographic protection for a protocol works as
-      advertised.</t>
+      protections, while important to improving the security of the Internet in the face of pervasive surveillance, to be out of scope for this work: here, we will assume that a given cryptographic protection for a protocol works as advertised.</t>
 
   </section>
   
   <section title="Threat analysis">
       
       <t>On initial examination, the PPA would appear to be trivially
-      impossible to defend against. If the PPA has access to every byte of every packet of a communication, then full application payload and content is available.
+      impossible to defend against. If the PPA has access to every byte of every packet of a communication, then full application payload and content is available.</t>
 
       <t><xref target="RFC3365">Guidance to protocol designers</xref> to provide cryptographic protection of confidentiality in their protocols improves this situation a great deal. The use of <xref target="RFC5246">TLS</xref> reduces the information available for correlation to the network and transport layer headers (e.g. source and destination IP addresses and ports) on each hop, but leaves any data at rest used by a protocol on intermediate systems vulnerable to intermediate system compromise.</t>
 
@@ -222,7 +223,7 @@
 
       <t>In the remainder of this analysis, we list kinds of information which
       can be directly observed; this may seem somewhat obvious,
-      but are included for completeness. We then explore the types of information which may be useful for drawing inferences about user behavior, then go into practical detail on inference attacks against just information available in the IP header, to better illustrate the problem.</t>
+      but are included for completeness. We then explore the types of information which may be useful for drawing inferences about user behavior, then go into practical detail on inference attacks against just information available in the IP header, to better illustrate the extent of the problem.</t>
       
       <section title="Information subject to direct observation">
 
@@ -234,15 +235,17 @@
           
       </section>
       
-      <section title="Metainformation useful for inference">
+      <section title="Information useful for inference">
 
-          <t>[EDITOR'S NOTE: Most inference performed by a PPA falls under the rubric of correlation: observing the interactions among multiple protocols. There is also fingerprinting, which includes but is not not limited to interpacket
-          timing; packet sizes; flow packet and octet counts; presence of
-          options which could lead to OS fingerprinting for deNATting, etc.]</t>
+          <t>Inference is information extracted from later analysis of an observed communication, and/or correlation of observed information with information available from other sources. Indeed, most useful inference performed by a PPA falls under the rubric of correlation. The simplest example of this is the observation of DNS queries and answers from and to a source and correlating those with IP addresses with which that source communicates can give access to information otherwise not available from encrypted application payloads (e.g., the Host: HTTP/1.1 request header when HTTP is used with TLS).</t>
+
+          <t>Inference can also leverage information obtained from sources other than direct traffic observation. Geolocation databases, for example, have been developed for mundane applications including advertising. These can be used to map an IP address to a location [EDITOR'S NOTE: reference something relevant from geopriv], and that location information can be used to draw further inferences toward identifying or profiling an individual.</t>
+
+          <t>Social media provide a rich source of more or less publicly accessible information. This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated by the individuals themselves [EDITOR'S NOTE: this really starts moving into the policy and education space, so we should find a way to constrain this point to the technical realities...]. Correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
 
       </section>
 
-      <section title="The Non-Anonymity of IP Addresses">
+      <section title="On the Non-Anonymity of IP Addresses">
 
         <t>[EDITOR'S NOTE: frontmatter]</t>
 
@@ -255,7 +258,7 @@
       <t>Internet traffic can be monitored by tapping Internet links, or by
       installing monitoring tools in Internet routers. Of course, a single link or
       a single router only provides access to a fraction of the global Internet
-      traffic. However, monitoring a number of high capacity links or monitoring a
+      traffic. However, monitoring a number of high capacity links or a
       set of routers placed at strategic locations provides access to a good
       sampling of Internet traffic.</t> 
 
@@ -291,18 +294,16 @@
       <t>On the other hand, the reverse lookup of IP addresses of users is
       generally less informative less informative. For example, a lookup of the
       address currently used by one author's home network returns a name of the form
-      "c-xxx-xxx-xxx-xxx.hsd1.wa.comcast.net" in which the symbols "xxx-xxx-xxx-xxx"
-      correspond to the IP address used by the network. This particular type of
-      reverse DNS lookup does not reveal much interesting information.</t>
+      "c-192-000-002-033.hsd1.wa.comcast.net". This particular type of
+      reverse DNS lookup generally reveals only course-grained location information.</t>
 
       <t>In many jurisdictions, Internet Service Providers (ISPs) are required to provide identification on a case by case basis of the "owner" of a specific IP address for law enforcement purposes. This is a reasonably expedient process for targeted
       investigations, but pervasive surveillance requires something more efficient.
       A PPA that could secure the cooperation of the ISP could correlate IP addresses
       and user identities automatically.</t>
 
-      <t>
-      Even if the ISP does not cooperate, identity can often be obtained by 
-      analyzing the traffic. We will discuss in the next section how SMTP and HTTP 
+      <t>Even if the ISP does not cooperate, identity can often be obtained via inference. 
+      We will discuss in the next section how SMTP and HTTP 
       can leak information that links the IP address to the identity of the user. 
       </t>
 
@@ -319,12 +320,10 @@
         the links to the mail server, retrieve the user name provided by the client,
         and associate it with the IP address used to establish the connection.</t>
 
-        <t>
-        The same attack can be executed against the <xref target="RFC3261">SIP</xref>
-        protocol, if the connection between the SIP UA and the SIP server operates in clear text. 
-        </t>
+        <t>The same attack can be executed against the <xref target="RFC3261">SIP</xref>
+        protocol, if the connection between the SIP UA and the SIP server operates in clear text</t>
 
-        <t>There are many instant messaging services operating over the
+        <t>In addition, there are many instant messaging services operating over the
         Internet using proprietary protocols. If any of these proprietary
         protocols includes clear-text transmission of the user identity, these can be
         observed to provide an association between the user identity and the IP
@@ -338,7 +337,7 @@
 
 <figure>
 <artwork align="left"><![CDATA[
-   Received: from xxx-xxx-xxx-xxx.zone13.example.org (HELO ?192.168.1.100?)
+   Received: from 192.000.002.044.zone13.example.org (HELO ?192.168.1.100?)
   (xxx.xxx.xxx.xxx)
   by lvpsyyy-yyy-yyy-yyy.example.net with ESMTPSA
   (DHE-RSA-AES256-SHA encrypted, authenticated);
@@ -350,68 +349,65 @@
 </figure>
 
           <t>This is the first "Received" header attached to the message by
-          the first SMTP relay.  For privacy reason, the field values have been
+          the first SMTP relay.  For privacy reasons, the field values have been
           anonymized. We learn here that the message was submitted by "Some One" on
-          October 27, from a host behind a NAT (192.168.1.100) that used the IP address
-          "xxx.xxx.xxx.xxx." The information remained in the message, and is accessible
-          by all recipients of the "perpass" mailing list, or indeed by any monitoring
-          service that sees at least one copy of the message. </t>
+          October 27, from a host behind a <xref target="RFC1918">NAT (192.168.1.100)</xref> that used the IP address 192.0.2.44. The information remained in the message, and is accessible
+          by all recipients of the "perpass" mailing list, or indeed by any PPA that sees at least one copy of the message. </t>
 
-          <t>For monitoring services, such information is just plain candy.
-          Monitor enough e-mail traffic and you can regularly update the mapping between
-          IP addresses and individuals. Even if the SMTP traffic was encrypted, the
-          monitoring service could still register to receive a copy of public mailing
-          lists like "perpass," and then log the header fields. </t>
+          <t>A PPA that can observe sufficient email traffic can regularly update the mapping between public IP addresses and individual email identities. Even if the SMTP traffic was encrypted on submission and relaying, the PPA can still receive a copy of public mailing
+          lists like "perpass". </t>
 
           <t>
           Similar information is available in the SIP headers <xref target="RFC3261" />.
           </t>
 
-</section>
+        </section>
 
-<section title="Tracking address use with web cookies">
-<t>
-Many web sites only encrypt a small fraction of their transactions. A popular pattern was
-to use HTTPS for the login information, and then use a "cookie" to associate following
-clear-text transactions with the user's identity. Cookies are also used by various
-advertisement services to quickly identify the users and serve them with "personalized" 
-advertisements. Such cookies are particularly useful if the advertisement services wants to 
-keep tracking the user across multiple sessions that may use different IP addresses.
-</t>
-<t>
-As cookies are sent in clear text, a monitoring service can build a database that
-associates cookies to IP addresses. If the IP address is already identified, the cookie 
-can be linked to the user identify. After that, if the same cookie appears on a 
-new IP address, the new IP address can be immediately associated with the pre-determined
-identity.
-</t>
-</section>
+        <section title="Tracking address use with web cookies">
 
-<section title="Tracking address use with network graphs">
-<t>
-There have been many publicly reported instances in which the police managed to find
-the owner of a "disposable" cell phone. In theory this is hard, because there is no
-direct registration of the owner's identity. But in practice, the identity can be 
-inferred through analysis of network graphs. 
-</t>
-<t>
-Suppose that the new owner of the cell phone uses it carelessly to call his mother, 
-his brother, his boss and his preferred restaurant. Mother, brother, boss and restaurant 
-are part of the "network graph" already collected by pervasive monitoring, and in fact 
-constitute an almost unique signature of this particular individual. A quick database
-search and voila, the cell phone is identified.
-</t>
-<t>
-The same approach can be applied to IP addresses. Users do a lot of repeat visits to 
-web sites, mail servers, game servers, instant messaging servers, etc. These visits 
-tend to follow time patterns. It is easy to imagine that if a particular pattern was 
-seen from address "A" one day, and the same pattern from address "B" the next day, then
-A and B point to the same user, whose computer just got a new address. At that point,
-the user may be identified only as a "case number," but the real identity can 
-be filled as soon as email monitoring is successful, or sip monitoring, or 
-maybe some ISP cooperation.
-</t>
-</section>
+          <t>Many web sites only encrypt a small fraction of their transactions. A
+          popular pattern was to use HTTPS for the login information, and then use a
+          "cookie" to associate following clear-text transactions with the user's
+          identity. Cookies are also used by various advertisement services to quickly
+          identify the users and serve them with "personalized" advertisements. Such
+          cookies are particularly useful if the advertisement services want to keep
+          tracking the user across multiple sessions that may use different IP
+          addresses.</t>
+
+          <t>As cookies are sent in clear text, a PPA can build a database that
+          associates cookies to IP addresses for non-HTTPS traffic. If the IP address is
+          already identified, the cookie  can be linked to the user identify. After
+          that, if the same cookie appears on a  new IP address, the new IP address can
+          be immediately associated with the pre-determined identity. </t>
+
+        </section>
+
+        <section title="Tracking address use with network graphs">
+
+          <t> There have been many publicly reported instances in which the police
+          managed to find the owner of a "disposable" cell phone. In theory this is
+          hard, because there is no direct registration of the owner's identity. But in
+          practice, the identity can be  inferred through analysis of network graphs.
+          </t>
+          
+          <t> Suppose that the new owner of the cell phone uses it carelessly to call
+          his mother,  his brother, his boss and his preferred restaurant. Mother,
+          brother, boss and restaurant  are part of the "network graph" already
+          collected by pervasive monitoring, and in fact  constitute an almost unique
+          signature of this particular individual. A quick database search and voila,
+          the cell phone is identified. </t>
+          
+          <t>The same approach can be applied to IP addresses. Users do a lot of repeat
+          visits to web sites, mail servers, game servers, instant messaging servers,
+          etc. These visits tend to follow time patterns. It is easy to imagine that if
+          a particular pattern was  seen from address "A" one day, and the same pattern
+          from address "B" the next day, then A and B point to the same user, whose
+          computer just got a new address. At that point, the user may be identified
+          only as a "case number," but the real identity can be filled as soon as email
+          monitoring is successful, or SIP monitoring, or maybe some ISP cooperation.
+          </t>
+
+        </section>
 
     </section>
 
@@ -420,7 +416,7 @@ maybe some ISP cooperation.
   <section title="Evaluating protocols for PPA resistance">
     
     <t>[EDITOR'S NOTE: How to look at a protocol and evaluate the observability
-    of the information it transports?]</t>
+    of the information it transports? Probably refer to draft-cooper-]</t>
     
   </section>
   
