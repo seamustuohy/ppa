@@ -110,7 +110,7 @@
   
   <section title="Terminology">
       
-      <t>[EDITOR'S NOTE: Check to see whether we actually use these...]
+      <t>[EDITOR'S NOTE: Check to see whether we actually use these...]</t>
 
       <t>The terms Anonymity, Anonymity Set, Anonymous, Attacker, Eavesdropper,
       Fingerprint, Fingerprinting, Identifier, Identity, Individual, Initiator,
@@ -298,6 +298,8 @@ the IP header, to better illustrate the extent of the problem.</t>
       can leak information that links the IP address to the identity of the user. 
       </t>
 
+      </section>
+
       <section title="Monitoring messaging clients for IP address correlation">
 
         <t>POP3 <xref target="RFC1939" /> and IMAP <xref target="RFC3501" />
@@ -425,11 +427,11 @@ the IP header, to better illustrate the extent of the problem.</t>
       security features designed into a protocol which are too complex to
       understand will suffer from limited implementation and deployment. A good
       example of such a case is IPsec where primary complaints are related to
-      its complexity <xref target="Ferguson03"/>. 
+      its complexity <xref target="Ferguson03"/>.</t>
 
       <t>The auditability of a protocol is directly related to the ability to measure and reason about the information that it radiates that could be used for inference by a PPA. Audits of designs and implementations can also reduce the risk of hidden side channels which could carry additional information useful to a PPA.</t>
 
-      <t>Open-source implementations generally increase auditability. This seems rather a implementation recommendation, but we note that it is easier for closed source code may to contain hidden sources of information radiation, hidden backdoors, while open source code can be reviewed by many people publicly.</a>
+      <t>Open-source implementations generally increase auditability. This seems rather a implementation recommendation, but we note that it is easier for closed source code may to contain hidden sources of information radiation, hidden backdoors, while open source code can be reviewed by many people publicly.</t>
 
     </section>
 
@@ -509,22 +511,33 @@ the IP header, to better illustrate the extent of the problem.</t>
   
     <references title="Normative References">
       <?rfc include="reference.RFC.6973" ?>
-      <?rfc include="I.D-cooper-ietf-privacy-requirements" ?>
+      <?rfc include="reference.I-D.cooper-ietf-privacy-requirements" ?>
     </references>
 
-    <references title="Informative References">
+    <references title="Informative References">        
+        <?rfc include="reference.RFC.1035" ?>
+        <?rfc include="reference.RFC.1918" ?>
+        <?rfc include="reference.RFC.1939" ?>
         <?rfc include="reference.RFC.2821" ?>
+        <?rfc include="reference.RFC.3261" ?>
         <?rfc include="reference.RFC.3365" ?>
+        <?rfc include="reference.RFC.3501" ?>
         <?rfc include="reference.RFC.3851" ?>
+        <?rfc include="reference.RFC.4033" ?>
+        <?rfc include="reference.RFC.4303" ?>
         <?rfc include="reference.RFC.5246" ?>
+        <?rfc include="reference.RFC.5321" ?>
         <?rfc include="reference.RFC.5655" ?>
         <?rfc include="reference.RFC.6120" ?>
+        <?rfc include="reference.RFC.7011" ?>
+
         <reference anchor="Ferguson03">
           <front>
             <title>A Cryptographic Evaluation of IPsec (https://www.schneier.com/paper-ipsec.pdf)</title>
             <author surname="Ferguson" initials="D."/>
             <author surname="Schneier" initials="B."/>
             <date month="December" year="2003"/>
+          </front>
         </reference>
     </references>
 
