@@ -211,7 +211,7 @@
       techniques other than full packet observation.</t>
 
       <t>In the remainder of this analysis, we categorize the ways that
-information radiates off of protocols. First, we list kinds of information
+information radiates off of protocols on the Internet. First, we list kinds of information
 that can be directly observed; this may seem somewhat obvious,
 but is included for completeness. We then explore the types of information
 which may be useful for drawing inferences about user behavior, then go into
@@ -232,9 +232,9 @@ the IP header, to better illustrate the extent of the problem.</t>
 
           <t>Inference is information extracted from later analysis of an observed communication, and/or correlation of observed information with information available from other sources. Indeed, most useful inference performed by a PPA falls under the rubric of correlation. The simplest example of this is the observation of DNS queries and answers from and to a source and correlating those with IP addresses with which that source communicates can give access to information otherwise not available from encrypted application payloads (e.g., the Host: HTTP/1.1 request header when HTTP is used with TLS).</t>
 
-          <t>Inference can also leverage information obtained from sources other than direct traffic observation. Geolocation databases, for example, have been developed for many applications including advertising. These can be used to map an IP address to a location [EDITOR'S NOTE: reference something relevant from geopriv], and that location information can be used to draw further inferences toward identifying or profiling an individual.</t>
+          <t>Inference can also leverage information obtained from sources other than direct traffic observation. Geolocation databases, for example, have been developed map IP addresses to a location, in order to provide location-aware services such as targeted advertising. This location information is often of sufficient resolution that it can be used to draw further inferences toward identifying or profiling an individual.</t>
 
-          <t>Social media provide another source of more or less publicly accessible information.This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated by the individuals themselves [EDITOR'S NOTE: this really starts moving into the policy and education space, so we should find a way to constrain this point to the technical realities...]. Correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
+          <t>Social media provide another source of more or less publicly accessible information.This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated by the individuals themselves: it represents information which the individuals are not necessarily interested in protecting for privascy reasons. However, correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
 
       </section>
 
@@ -244,7 +244,6 @@ the IP header, to better illustrate the extent of the problem.</t>
 
       <section title="Analysis of IP headers"
                anchor="analIP">
-
 
       <t>Internet traffic can be monitored by tapping Internet links, or by
       installing monitoring tools in Internet routers. Of course, a single link or
@@ -330,9 +329,9 @@ the IP header, to better illustrate the extent of the problem.</t>
 
 <figure>
 <artwork align="left"><![CDATA[
-   Received: from 192.000.002.044.zone13.example.org (HELO ?192.168.1.100?)
+   Received: from 192-000-002-044.zone13.example.org (HELO ?192.168.1.100?)
   (xxx.xxx.xxx.xxx)
-  by lvpsyyy-yyy-yyy-yyy.example.net with ESMTPSA
+  by lvps192-000-002-219.example.net with ESMTPSA
   (DHE-RSA-AES256-SHA encrypted, authenticated);
   27 Oct 2013 21:47:14 +0100
    Message-ID: <526D7BD2.7070908@example.org>
@@ -429,9 +428,7 @@ the IP header, to better illustrate the extent of the problem.</t>
       example of such a case is IPsec where primary complaints are related to
       its complexity <xref target="Ferguson03"/>.</t>
 
-      <t>The auditability of a protocol is directly related to the ability to measure and reason about the information that it radiates that could be used for inference by a PPA. Audits of designs and implementations can also reduce the risk of hidden side channels which could carry additional information useful to a PPA.</t>
-
-      <t>Open-source implementations generally increase auditability. This seems rather a implementation recommendation, but we note that it is easier for closed source code may to contain hidden sources of information radiation, hidden backdoors, while open source code can be reviewed by many people publicly.</t>
+      <t>The auditability of a protocol is directly related to the ability to measure and reason about the information that it radiates that could be used for inference by a PPA. Audits of designs and implementations can also reduce the risk of hidden side channels which could carry additional information useful to a PPA. One approach for improving auditability is the release of implementations as open source.</t>
 
     </section>
 
