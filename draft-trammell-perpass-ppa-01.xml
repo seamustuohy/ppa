@@ -455,6 +455,8 @@ the IP header, to better illustrate the extent of the problem.</t>
       out of a global prefix. Privacy addresses are meant to be used for a short time,
       typically no more than a day, and are specifically designed to render
       monitoring based on IPv6 addresses harder.</t>
+
+    </section>
 <!--
     <section title="Add indirection where possible">
 

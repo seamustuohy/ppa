@@ -5,10 +5,10 @@
 perpass non-WG                                               B. Trammell
 Internet-Draft                                                ETH Zurich
 Intended status: Informational                               D. Borkmann
-Expires: May 15, 2014                                            Red Hat
+Expires: May 17, 2014                                            Red Hat
                                                               C. Huitema
                                                    Microsoft Corporation
-                                                       November 11, 2013
+                                                       November 13, 2013
 
 
            A Threat Model for Pervasive Passive Surveillance
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 15, 2014.
+   This Internet-Draft will expire on May 17, 2014.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Trammell, et al.          Expires May 15, 2014                  [Page 1]
+Trammell, et al.          Expires May 17, 2014                  [Page 1]
 
 Internet-Draft         Pervasive Passive Adversary         November 2013
 
@@ -75,51 +75,45 @@ Table of Contents
    3.  The Pervasive Passive Adversary . . . . . . . . . . . . . . .   4
    4.  Threat analysis . . . . . . . . . . . . . . . . . . . . . . .   5
      4.1.  Information subject to direct observation . . . . . . . .   6
-     4.2.  Information useful for inference  . . . . . . . . . . . .   7
+     4.2.  Information useful for inference  . . . . . . . . . . . .   6
      4.3.  On the Non-Anonymity of IP Addresses  . . . . . . . . . .   7
-       4.3.1.  Analysis of IP headers  . . . . . . . . . . . . . . .   8
+       4.3.1.  Analysis of IP headers  . . . . . . . . . . . . . . .   7
        4.3.2.  Correlation of IP addresses to user identities  . . .   8
        4.3.3.  Monitoring messaging clients for IP address
-               correlation . . . . . . . . . . . . . . . . . . . . .   9
+               correlation . . . . . . . . . . . . . . . . . . . . .   8
        4.3.4.  Retrieving IP addresses from mail headers . . . . . .   9
        4.3.5.  Tracking address use with web cookies . . . . . . . .  10
        4.3.6.  Tracking address use with network graphs  . . . . . .  10
-   5.  Evaluating protocols for PPA resistance . . . . . . . . . . .  11
+   5.  Evaluating protocols for PPA resistance . . . . . . . . . . .  10
    6.  General protocol design recommendations for PPA resistance  .  11
      6.1.  Encrypt everything you can  . . . . . . . . . . . . . . .  11
      6.2.  Design and implement for simplicity and auditability  . .  12
      6.3.  Allow for fingerprinting resistance in protocol designs .  12
-     6.4.  Add indirection where possible  . . . . . . . . . . . . .  13
-     6.5.  Design for end-to-end open protocols  . . . . . . . . . .  13
-     6.6.  Use plausible deniability where possible  . . . . . . . .  13
-     6.7.  Use perfect forward secrecy . . . . . . . . . . . . . . .  13
-     6.8.  Avoid designing for trust relationships . . . . . . . . .  13
-     6.9.  Design for decentralization . . . . . . . . . . . . . . .  13
+     6.4.  Do not rely on static IP addresses  . . . . . . . . . . .  12
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
-   9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  14
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  14
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  14
-     10.2.  Informative References . . . . . . . . . . . . . . . . .  14
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
+   9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  13
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  13
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  13
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  13
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
 
 1.  Introduction
-
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                  [Page 2]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
 
    Surveillance is defined in [RFC6973], Section 5.1.1, as "the
    observation or monitoring of an individual's communications or
    activities".  Pervasive passive surveillance in the Internet is the
    practice of surveillance at widespread observation points, without
    any particular target in mind at surveillance time of surveillance,
-   and without any modification or injection of of network traccid.
+   and without any modification or injection of of network traffic.
+
+
+
+Trammell, et al.          Expires May 17, 2014                  [Page 2]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
    Pervasive passive surveillance allows subsequent analysis and
    inference to be applied to the collected data to achieve surveillance
    aims on a target to be identified later, or to analyze general
@@ -162,20 +156,20 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    Observation:   Information collected directly from communications by
       an eavesdropper or observer.  For example, the knowledge that
       <alice@example.com> sent a message to <bob@example.com> via SMTP
-
-
-
-Trammell, et al.          Expires May 15, 2014                  [Page 3]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
-
       taken from the headers of an observed SMTP message would be an
       observation.
 
    Inference:   Information extracted from analysis of information
       collected directly from communications by an eavesdropper or
       observer.  For example, the knowledge that a given web page was
+
+
+
+Trammell, et al.          Expires May 17, 2014                  [Page 3]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
       accessed by a given IP address, by comparing the size in octets of
       measured network flow records to fingerprints derived from known
       sizes of linked resources on the web servers involved would be an
@@ -211,21 +205,6 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    information about the observed individual from them, in absence of
    directly-observed sources of the same information.
 
-
-
-
-
-
-
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                  [Page 4]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
-
    We would like to assume that the PPA does not have the ability to
    observe communications on trusted systems at either the initiator or
    a recipient of a communication, as there would seem to be little that
@@ -239,6 +218,14 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    the reversal of strong encryption -- e.g. compromised key material or
    knowledge of weaknesses in the design or implementation of
    cryptographic algorithms at the initiator, recipient, and/or
+
+
+
+Trammell, et al.          Expires May 17, 2014                  [Page 4]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
    intermediaries.  However, we consider the evaluation and improvement
    of cryptographic protections, while important to improving the
    security of the Internet in the face of pervasive surveillance, to be
@@ -274,14 +261,6 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    point(s) available to it, and will collect as little raw data as
    necessary to support its aims.  This allows us to back away from this
    worst-case scenario.  Storing full packet information for a fully-
-
-
-
-Trammell, et al.          Expires May 15, 2014                  [Page 5]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
-
    loaded 10 Gigabit Ethernet link will fill one 4TB hard disk (the
    largest commodity hard disk available as of this writing) in less
    than an hour; storing network flow data from the same link, e.g. as
@@ -293,13 +272,21 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    packet observation.
 
    In the remainder of this analysis, we categorize the ways that
-   information radiates off of protocols.  First, we list kinds of
-   information that can be directly observed; this may seem somewhat
-   obvious, but is included for completeness.  We then explore the types
-   of information which may be useful for drawing inferences about user
-   behavior, then go into practical detail on inference attacks against
-   just information available in the IP header, to better illustrate the
-   extent of the problem.
+   information radiates off of protocols on the Internet.  First, we
+   list kinds of information that can be directly observed; this may
+
+
+
+Trammell, et al.          Expires May 17, 2014                  [Page 5]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
+   seem somewhat obvious, but is included for completeness.  We then
+   explore the types of information which may be useful for drawing
+   inferences about user behavior, then go into practical detail on
+   inference attacks against just information available in the IP
+   header, to better illustrate the extent of the problem.
 
 4.1.  Information subject to direct observation
 
@@ -331,13 +318,6 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    end-to-end by the application layer protocol, or the implementation
    uses an encrypted store for this data.
 
-
-
-Trammell, et al.          Expires May 15, 2014                  [Page 6]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
-
 4.2.  Information useful for inference
 
    Inference is information extracted from later analysis of an observed
@@ -350,29 +330,37 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    otherwise not available from encrypted application payloads (e.g.,
    the Host: HTTP/1.1 request header when HTTP is used with TLS).
 
+
+
+
+Trammell, et al.          Expires May 17, 2014                  [Page 6]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
    Inference can also leverage information obtained from sources other
    than direct traffic observation.  Geolocation databases, for example,
-   have been developed for many applications including advertising.
-   These can be used to map an IP address to a location [EDITOR'S NOTE:
-   reference something relevant from geopriv], and that location
-   information can be used to draw further inferences toward identifying
-   or profiling an individual.
+   have been developed map IP addresses to a location, in order to
+   provide location-aware services such as targeted advertising.  This
+   location information is often of sufficient resolution that it can be
+   used to draw further inferences toward identifying or profiling an
+   individual.
 
    Social media provide another source of more or less publicly
-   accessible information.This information can be extremely semantically
-   rich, including information about an individual's location,
-   associations with other individuals and groups, and activities.
-   Further, this information is generally contributed and curated by the
-   individuals themselves [EDITOR'S NOTE: this really starts moving into
-   the policy and education space, so we should find a way to constrain
-   this point to the technical realities...].  Correlation of this
-   social networking data with information available from direct
-   observation of network traffic allows the creation of a much richer
-   picture of an individual's activities than either alone.  We note
-   with some alarm that there is little that can be done from the
-   protocol design side to limit such correlation by a PPA, and that the
-   existence of such data sources in many cases greatly complicates the
-   problem of protecting privacy by hardening protocols alone.
+   accessible information.  This information can be extremely
+   semantically rich, including information about an individual's
+   location, associations with other individuals and groups, and
+   activities.  Further, this information is generally contributed and
+   curated by the individuals themselves: it represents information
+   which the individuals are not necessarily interested in protecting
+   for privascy reasons.  However, correlation of this social networking
+   data with information available from direct observation of network
+   traffic allows the creation of a much richer picture of an
+   individual's activities than either alone.  We note with some alarm
+   that there is little that can be done from the protocol design side
+   to limit such correlation by a PPA, and that the existence of such
+   data sources in many cases greatly complicates the problem of
+   protecting privacy by hardening protocols alone.
 
 4.3.  On the Non-Anonymity of IP Addresses
 
@@ -386,14 +374,6 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    that only takes one unprotected link in the chain to associate with
    an identity.
 
-
-
-
-Trammell, et al.          Expires May 15, 2014                  [Page 7]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
-
 4.3.1.  Analysis of IP headers
 
    Internet traffic can be monitored by tapping Internet links, or by
@@ -406,6 +386,14 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    Tools like IPFIX [RFC7011] allow administrators to acquire statistics
    about sequences of packets with some common properties that pass
    through a network device.  The most common set of properties used in
+
+
+
+Trammell, et al.          Expires May 17, 2014                  [Page 7]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
    flow measurement is the "five-tuple" of source and destination
    addresses, protocol type, and source and destination ports.  These
    statistics are commonly used for network engineering, but could
@@ -434,7 +422,7 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    generally less informative less informative.  For example, a lookup
    of the address currently used by one author's home network returns a
    name of the form "c-192-000-002-033.hsd1.wa.comcast.net".  This
-   particular type of reverse DNS lookup generally reveals only course-
+   particular type of reverse DNS lookup generally reveals only coarse-
    grained location information.
 
    In many jurisdictions, Internet Service Providers (ISPs) are required
@@ -442,14 +430,6 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    specific IP address for law enforcement purposes.  This is a
    reasonably expedient process for targeted investigations, but
    pervasive surveillance requires something more efficient.  A PPA that
-
-
-
-Trammell, et al.          Expires May 15, 2014                  [Page 8]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
-
    could secure the cooperation of the ISP could correlate IP addresses
    and user identities automatically.
 
@@ -462,6 +442,14 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
 
    POP3 [RFC1939] and IMAP [RFC3501] are used to retrieve mail from mail
    servers, while a variant of SMTP [RFC5321] is used to submit messages
+
+
+
+Trammell, et al.          Expires May 17, 2014                  [Page 8]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
    through mail servers.  IMAP connections originate from the client,
    and typically start with an authentication exchange in which the
    client proves its identity by answering a password challenge.
@@ -489,21 +477,14 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    between regular mail and spam.  Here is an extract from the headers
    of a message recently received from the "perpass" mailing list:
 
-    Received: from 192.000.002.044.zone13.example.org (HELO ?192.168.1.100?)
+    Received: from 192-000-002-044.zone13.example.org (HELO ?192.168.1.100?)
    (xxx.xxx.xxx.xxx)
-   by lvpsyyy-yyy-yyy-yyy.example.net with ESMTPSA
+   by lvps192-000-002-219.example.net with ESMTPSA
    (DHE-RSA-AES256-SHA encrypted, authenticated);
    27 Oct 2013 21:47:14 +0100
     Message-ID: <526D7BD2.7070908@example.org>
     Date: Sun, 27 Oct 2013 20:47:14 +0000
     From: Some One <some.one@example.org>
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                  [Page 9]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
 
 
    This is the first "Received" header attached to the message by the
@@ -517,6 +498,14 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
 
    A PPA that can observe sufficient email traffic can regularly update
    the mapping between public IP addresses and individual email
+
+
+
+Trammell, et al.          Expires May 17, 2014                  [Page 9]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
    identities.  Even if the SMTP traffic was encrypted on submission and
    relaying, the PPA can still receive a copy of public mailing lists
    like "perpass".
@@ -547,20 +536,12 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    individual to various public services (e.g. websites, mail servers,
    game servers), and exploit patterns in the observed traffic to
    correlate this address with other addresses that show similar
-   patterns.  For example, an two addresses that show connections to the
-   same IMAP or webmail services, the same set of favorite websites, and
-   game servers at similar times of day may be associated with the same
-   individual.  Correlated addresses can then be tied to an individual
-   through one of the techniques above, walking the "network graph" to
-   expand the set of attributable traffic.
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                 [Page 10]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
+   patterns.  For example, any two addresses that show connections to
+   the same IMAP or webmail services, the same set of favorite websites,
+   and game servers at similar times of day may be associated with the
+   same individual.  Correlated addresses can then be tied to an
+   individual through one of the techniques above, walking the "network
+   graph" to expand the set of attributable traffic.
 
 5.  Evaluating protocols for PPA resistance
 
@@ -572,6 +553,14 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    o  The confidentiality of all information not absolutely required for
       the operation of the protocol at intermediate systems is
       cryptographically protected.
+
+
+
+
+Trammell, et al.          Expires May 17, 2014                 [Page 10]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
 
    o  The confidentiality of all identifiers which can be associated
       with specific individuals through observation or inference are
@@ -611,20 +600,23 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    encryption is a deployment problem rather than a protocol design and
    implementation problem; improvements in usability may be useful here.
 
-
-
-Trammell, et al.          Expires May 15, 2014                 [Page 11]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
-
    The design and deployment of end-to-end encryption for a protocol,
    especially for messaging applications, can reduce the ability of a
    PPA to observe application-layer information and identifiers at a
    compromised intermediate system.
 
-   [EDITOR'S NOTE: mention djb, DNScurve? at the expense of performance
-   of course]
+
+
+
+
+
+
+
+
+Trammell, et al.          Expires May 17, 2014                 [Page 11]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
 
 6.2.  Design and implement for simplicity and auditability
 
@@ -641,13 +633,9 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    measure and reason about the information that it radiates that could
    be used for inference by a PPA.  Audits of designs and
    implementations can also reduce the risk of hidden side channels
-   which could carry additional information useful to a PPA.
-
-   Open-source implementations generally increase auditability.  This
-   seems rather a implementation recommendation, but we note that it is
-   easier for closed source code may to contain hidden sources of
-   information radiation, hidden backdoors, while open source code can
-   be reviewed by many people publicly.
+   which could carry additional information useful to a PPA.  One
+   approach for improving auditability is the release of implementations
+   as open source.
 
 6.3.  Allow for fingerprinting resistance in protocol designs
 
@@ -661,74 +649,38 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    applicable in the general case, protocol designs can make it possible
    do to this.
 
+6.4.  Do not rely on static IP addresses
+
+   Always on broadband connections may or may not provide the
+   subscribers with static IP addresses.  Some users pay extra for the
+   convenience of a stable address.  Of course, stable addresses greatly
+   facilitate IP header monitoring.
+
+   In contrast, we could imagine that the broadband modem is re-
+   provisioned at regular interval with a new IPv4 address, or with a
+   new IPv6 address prefix.  Some convenience will be lost, and TCP
+   connections active before the renumbering will have to be
+   reestablished.  However, the renumbering will significantly
+   complicate the task of IP header monitoring.
+
+   Similarly, the Privacy Extensions for Stateless Address
+   Autoconfiguration in IPv6 [RFC4941] allow users to configure
+   temporary IPv6 addresses out of a global prefix.  Privacy addresses
 
 
 
-
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                 [Page 12]
+Trammell, et al.          Expires May 17, 2014                 [Page 12]
 
 Internet-Draft         Pervasive Passive Adversary         November 2013
 
 
-6.4.  Add indirection where possible
-
-   [EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits
-   here...]
-
-6.5.  Design for end-to-end open protocols
-
-   [EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits
-   here...]
-
-6.6.  Use plausible deniability where possible
-
-   [EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits
-   here.  This one looks maybe a bit too specific.]
-
-6.7.  Use perfect forward secrecy
-
-   [EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits
-   here.  This one looks maybe a bit too specific.]
-
-6.8.  Avoid designing for trust relationships
-
-   [EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits
-   here: Trust relationships between coorporate entities with the rest
-   of Internet users are prone to a their countries jurisdication.  The
-   compromise of various certificate authorities, for example, raise
-   doubt whether their original purpose is actually deployed in a way
-   they were designed to.  As bad press will destroy the image and trust
-   of such an authority, incentives seem obvious to hide breaches in
-   secrecy.  Moreover, it seems impossible to openly audit which
-   authority is trustworthy and which isn't. MITM etc etc
-
-6.9.  Design for decentralization
-
-   [EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits
-   here.  This one gets into new business models.  We need to talk about
-   that if we want to harden the Internet, but this might not be the
-   document to do so.]
+   are meant to be used for a short time, typically no more than a day,
+   and are specifically designed to render monitoring based on IPv6
+   addresses harder.
 
 7.  IANA Considerations
 
    This document has no actions for IANA
-
-
-
-
-
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                 [Page 13]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
 
 8.  Security Considerations
 
@@ -769,22 +721,20 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
               E. Lear, "Address Allocation for Private Internets", BCP
               5, RFC 1918, February 1996.
 
+
+
+
+
+Trammell, et al.          Expires May 17, 2014                 [Page 13]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
    [RFC1939]  Myers, J. and M. Rose, "Post Office Protocol - Version 3",
               STD 53, RFC 1939, May 1996.
 
    [RFC2821]  Klensin, J., "Simple Mail Transfer Protocol", RFC 2821,
               April 2001.
-
-
-
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                 [Page 14]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
 
    [RFC3261]  Rosenberg, J., Schulzrinne, H., Camarillo, G., Johnston,
               A., Peterson, J., Sparks, R., Handley, M., and E.
@@ -809,6 +759,10 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
    [RFC4303]  Kent, S., "IP Encapsulating Security Payload (ESP)", RFC
               4303, December 2005.
 
+   [RFC4941]  Narten, T., Draves, R., and S. Krishnan, "Privacy
+              Extensions for Stateless Address Autoconfiguration in
+              IPv6", RFC 4941, September 2007.
+
    [RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security
               (TLS) Protocol Version 1.2", RFC 5246, August 2008.
 
@@ -824,6 +778,14 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
 
    [RFC7011]  Claise, B., Trammell, B., and P. Aitken, "Specification of
               the IP Flow Information Export (IPFIX) Protocol for the
+
+
+
+Trammell, et al.          Expires May 17, 2014                 [Page 14]
+
+Internet-Draft         Pervasive Passive Adversary         November 2013
+
+
               Exchange of Flow Information", STD 77, RFC 7011, September
               2013.
 
@@ -833,14 +795,6 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
               December 2003.
 
 Authors' Addresses
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                 [Page 15]
-
-Internet-Draft         Pervasive Passive Adversary         November 2013
-
 
    Brian Trammell
    Swiss Federal Institute of Technology Zurich
@@ -883,14 +837,4 @@ Internet-Draft         Pervasive Passive Adversary         November 2013
 
 
 
-
-
-
-
-
-
-
-
-
-
-Trammell, et al.          Expires May 15, 2014                 [Page 16]
+Trammell, et al.          Expires May 17, 2014                 [Page 15]
