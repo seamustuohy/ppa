@@ -53,7 +53,7 @@
       </address>
     </author>
 
-  <date year="2013" month="November" day="11"/>
+  <date year="2013" month="November" day="13"/>
   <area>Security</area>
   <workgroup>perpass non-WG</workgroup>
   <abstract>
@@ -79,7 +79,7 @@
     "the observation or monitoring of an individual's communications or
     activities". Pervasive passive surveillance in the Internet is the practice 
     of surveillance at widespread observation points, without any particular target in mind at
-    surveillance time of surveillance, and without any modification or injection of of network traccid. Pervasive
+    surveillance time of surveillance, and without any modification or injection of of network traffic. Pervasive
     passive surveillance allows subsequent analysis and inference to be applied
     to the collected data to achieve surveillance aims on a target to be
     identified later, or to analyze general communications patterns and/or
@@ -234,7 +234,7 @@ the IP header, to better illustrate the extent of the problem.</t>
 
           <t>Inference can also leverage information obtained from sources other than direct traffic observation. Geolocation databases, for example, have been developed map IP addresses to a location, in order to provide location-aware services such as targeted advertising. This location information is often of sufficient resolution that it can be used to draw further inferences toward identifying or profiling an individual.</t>
 
-          <t>Social media provide another source of more or less publicly accessible information.This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated by the individuals themselves: it represents information which the individuals are not necessarily interested in protecting for privascy reasons. However, correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
+          <t>Social media provide another source of more or less publicly accessible information. This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated by the individuals themselves: it represents information which the individuals are not necessarily interested in protecting for privascy reasons. However, correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
 
       </section>
 
@@ -285,7 +285,7 @@ the IP header, to better illustrate the extent of the problem.</t>
       generally less informative less informative. For example, a lookup of the
       address currently used by one author's home network returns a name of the form
       "c-192-000-002-033.hsd1.wa.comcast.net". This particular type of
-      reverse DNS lookup generally reveals only course-grained location information.</t>
+      reverse DNS lookup generally reveals only coarse-grained location information.</t>
 
       <t>In many jurisdictions, Internet Service Providers (ISPs) are required to provide identification on a case by case basis of the "owner" of a specific IP address for law enforcement purposes. This is a reasonably expedient process for targeted
       investigations, but pervasive surveillance requires something more efficient.
@@ -376,7 +376,7 @@ the IP header, to better illustrate the extent of the problem.</t>
 
         <section title="Tracking address use with network graphs">
 
-          <t>A PPA can track traffic from an IP address not yet associated with an individual to various public services (e.g. websites, mail servers, game servers), and exploit patterns in the observed traffic to correlate this address with other addresses that show similar patterns. For example, an two addresses that show connections to the same IMAP or webmail services, the same set of favorite websites, and game servers at similar times of day may be associated with the same individual. Correlated addresses can then be tied to an individual through one of the techniques above, walking the "network graph" to expand the set of attributable traffic.</t>
+          <t>A PPA can track traffic from an IP address not yet associated with an individual to various public services (e.g. websites, mail servers, game servers), and exploit patterns in the observed traffic to correlate this address with other addresses that show similar patterns. For example, any two addresses that show connections to the same IMAP or webmail services, the same set of favorite websites, and game servers at similar times of day may be associated with the same individual. Correlated addresses can then be tied to an individual through one of the techniques above, walking the "network graph" to expand the set of attributable traffic.</t>
 
         </section>
 
@@ -414,7 +414,6 @@ the IP header, to better illustrate the extent of the problem.</t>
 
       <t>The design and deployment of end-to-end encryption for a protocol, especially for messaging applications, can reduce the ability of a PPA to observe application-layer information and identifiers at a compromised intermediate system.</t>
 
-      <t>[EDITOR'S NOTE: mention djb, DNScurve? at the expense of performance of course]</t>
     </section>
 
     <section title="Design and implement for simplicity and auditability">
@@ -440,6 +439,23 @@ the IP header, to better illustrate the extent of the problem.</t>
     
     </section>
 
+    <section title="Do not rely on static IP addresses">
+
+      <t>Always on broadband connections may or may not provide the
+      subscribers with static IP addresses. Some users pay extra for the convenience
+      of a stable address. Of course, stable addresses greatly facilitate IP header monitoring.</t>
+
+      <t>In contrast, we could imagine that the broadband modem is re-provisioned at regular
+      interval with a new IPv4 address, or with a new IPv6 address prefix. Some convenience will
+      be lost, and TCP connections active before the renumbering will have to be reestablished.
+      However, the renumbering will significantly complicate the task of IP header monitoring.</t>
+
+      <t>Similarly, the Privacy Extensions for Stateless Address Autoconfiguration in IPv6
+      <xref target="RFC4941"/> allow users to configure temporary IPv6 addresses
+      out of a global prefix. Privacy addresses are meant to be used for a short time,
+      typically no more than a day, and are specifically designed to render
+      monitoring based on IPv6 addresses harder.</t>
+<!--
     <section title="Add indirection where possible">
 
       <t>[EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits here...]</t>
@@ -480,6 +496,7 @@ the IP header, to better illustrate the extent of the problem.</t>
       <t>[EDITOR'S NOTE: from dborkmann; fill this out once it's clear it fits here. This one gets into new business models. We need to talk about that if we want to harden the Internet, but this might not be the document to do so.]</t>
 
     </section>
+-->
 
   </section>
 
@@ -522,6 +539,7 @@ the IP header, to better illustrate the extent of the problem.</t>
         <?rfc include="reference.RFC.3851" ?>
         <?rfc include="reference.RFC.4033" ?>
         <?rfc include="reference.RFC.4303" ?>
+        <?rfc include="reference.RFC.4941" ?>
         <?rfc include="reference.RFC.5246" ?>
         <?rfc include="reference.RFC.5321" ?>
         <?rfc include="reference.RFC.5655" ?>
