@@ -38,7 +38,6 @@
       <email>dborkman@redhat.com</email>
     </address>
   </author>
-
    <author fullname="Christian Huitema" initials="C." surname="Huitema">
       <organization>Microsoft Corporation</organization>
       <address>
@@ -79,7 +78,7 @@
     "the observation or monitoring of an individual's communications or
     activities". Pervasive passive surveillance in the Internet is the practice 
     of surveillance at widespread observation points, without any particular target in mind at
-    surveillance time of surveillance, and without any modification or injection of of network traffic. Pervasive
+    time of surveillance, and without any modification or injection of of network traffic. Pervasive
     passive surveillance allows subsequent analysis and inference to be applied
     to the collected data to achieve surveillance aims on a target to be
     identified later, or to analyze general communications patterns and/or
@@ -95,7 +94,7 @@
     
     <t>In this document, we take as given that communications systems should
     aim to provide privacy guarantees to their users, and that susceptibility
-    to pervasive surveillance should avoided to the extent possible as a design
+    to pervasive surveillance should be avoided to the extent possible as a design
     goal in protocol design. From these assumptions we take the very act of
     pervasive surveillance to be adversarial by definition.</t>
     
@@ -167,7 +166,7 @@
       inference. Direct observation involves taking information directly from
       eavesdropped communications - e.g., URLs identifying content or email
       addresses identifying individuals from application-layer headers.
-      Inference, on the other involves analyzing eavesdropped information to
+      Inference, on the other hand involves analyzing eavesdropped information to
       derive new information from it; e.g., searching for application or
       behavioral fingerprints in observed traffic to derive information about
       the observed individual from them, in absence of directly-observed
@@ -178,10 +177,9 @@
       <t>The PPA may additionally have have privileged information
       allowing the reversal of strong encryption -- e.g. compromised key material
       or knowledge of weaknesses in the design or implementation of
-      cryptographic algorithms at the initiator, recipient, and/or
+      cryptographic algorithms or random number generators at the initiator, recipient, and/or
       intermediaries. However, we consider the evaluation and improvement of cryptographic
       protections, while important to improving the security of the Internet in the face of pervasive surveillance, to be out of scope for this work: here, we will assume that a given cryptographic protection for a protocol works as advertised.</t>
-
   </section>
   
   <section title="Threat analysis">
@@ -234,7 +232,7 @@ the IP header, to better illustrate the extent of the problem.</t>
 
           <t>Inference can also leverage information obtained from sources other than direct traffic observation. Geolocation databases, for example, have been developed map IP addresses to a location, in order to provide location-aware services such as targeted advertising. This location information is often of sufficient resolution that it can be used to draw further inferences toward identifying or profiling an individual.</t>
 
-          <t>Social media provide another source of more or less publicly accessible information. This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated by the individuals themselves: it represents information which the individuals are not necessarily interested in protecting for privascy reasons. However, correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
+          <t>Social media provide another source of more or less publicly accessible information. This information can be extremely semantically rich, including information about an individual's location, associations with other individuals and groups, and activities. Further, this information is generally contributed and curated voluntarily by the individuals themselves: it represents information which the individuals are not necessarily interested in protecting for privascy reasons. However, correlation of this social networking data with information available from direct observation of network traffic allows the creation of a much richer picture of an individual's activities than either alone. We note with some alarm that there is little that can be done from the protocol design side to limit such correlation by a PPA, and that the existence of such data sources in many cases greatly complicates the problem of protecting privacy by hardening protocols alone.</t>
 
       </section>
 
@@ -282,10 +280,10 @@ the IP header, to better illustrate the extent of the problem.</t>
       servers, to accelerate such lookups.</t>
 
       <t>On the other hand, the reverse lookup of IP addresses of users is
-      generally less informative less informative. For example, a lookup of the
+      generally less informative. For example, a lookup of the
       address currently used by one author's home network returns a name of the form
       "c-192-000-002-033.hsd1.wa.comcast.net". This particular type of
-      reverse DNS lookup generally reveals only coarse-grained location information.</t>
+      reverse DNS lookup generally reveals only coarse-grained location or provider information.</t>
 
       <t>In many jurisdictions, Internet Service Providers (ISPs) are required to provide identification on a case by case basis of the "owner" of a specific IP address for law enforcement purposes. This is a reasonably expedient process for targeted
       investigations, but pervasive surveillance requires something more efficient.
